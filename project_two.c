@@ -66,12 +66,13 @@ void*	Merging_Runner(/*void* param*/){
 	//struct runner_struct* arg_struct = (struct runner_struct*) param;
 	
 	int i = 0, j= 0, k = 0;
+	int offset = MAX_ARRAY_LEN/2;
 	while(i <= element from u && j<= element from v){
-		if(g_unsorted_array[i] < g_unsorted_array[j]){
+		if(g_unsorted_array[i] < g_unsorted_array[j+offset]){
 			g_sorted_array[k] = g_unsorted_array[i]
 			i++;
 		}else{
-			g_sorted_array[k] = g_unsorted_array[j];
+			g_sorted_array[k] = g_unsorted_array[j+offset];
 			j++;
 		}
 		k++;
