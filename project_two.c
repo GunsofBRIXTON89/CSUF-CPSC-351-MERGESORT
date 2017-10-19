@@ -6,14 +6,14 @@
 // Class: CPSC-351 "Operating System Concepts"
 // Time: T/TH 2:30 P.M.
 // Instructor: Dr. McCarthy, W.
-// Project: Sudoku Solution Validator
+// Project: Multithreaded Sorting Application
 //
-// Description: As stated in the 9th Edition Silbershatz text, Ch04, Pg 197,
+// Description: As stated in the 9th Edition Silbershatz text, Ch04, Pg 199,
 // this program consists of designing a multithreaded application that
 // determines whether a soduku solution is valid. The approch we took was to
 // create three seperate threads to cover the nine Rows, Columns, and Grids.
 //
-// HOW to Compile: gcc -Wall -std=c99 project_two.c -pthread -o project_one.exe
+// HOW to Compile: gcc -Wall -std=c99 project_two.c -pthread -o project_two.exe
 // ============================================================================
 
 
