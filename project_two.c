@@ -9,11 +9,19 @@
 // Project: Multithreaded Sorting Application
 //
 // Description: 
+// A list of integers is divied into two smaller lists of equal siz. Two 
+// seperate threads (which are which are dubbed "sorting threads") will sort each
+// subset list Using a sorting Algorithm of our choice. Then a third "merging"
+// thread combines the two sublist into a single list.
 //
-// HOW to Compile: gcc -Wall -std=c99 project_two.c -pthread -o project_two.exe
+// How to compile: gcc -Wall -std=c99 project_two.c -pthread -o project_two.exe
 // ============================================================================
 
 
+#include <pthread.h>
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
  
 
 
@@ -22,7 +30,6 @@
 //
 // 
 // ===========================================================================================
-
 
 
 
