@@ -10,26 +10,51 @@
 //
 // Description: 
 // A list of integers is divied into two smaller lists of equal siz. Two 
-// seperate threads (which are which are dubbed "sorting threads") will sort each
-// subset list Using a sorting Algorithm of our choice. Then a third "merging"
-// thread combines the two sublist into a single list.
+// seperate threads (which are which are dubbed "sorting threads") will sort
+// each subset list Using a sorting Algorithm of our choice. Then a third 
+// "merging" thread combines the two sublist into a single list.
 //
 // How to compile: gcc -Wall -std=c99 project_two.c -pthread -o project_two.exe
 // ============================================================================
-
-
 #include <pthread.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
  
+#define MAX_ARRAY_LEN
+int g_unsorted_array[MAX_ARRAY_LEN] = {7,12,19,3,18,4,3,6,15,8};
+int g_sorted_array[MAX_ARRAY_LEN] = { 0 };
 
-
+struct 	runner_struct {
+	int starting_index;
+};
 
 // === Sorting_Runner =======================================================================
 //
 // 
 // ==========================================================================================
+void*	Sorting_Runner(void* param){
+	struct runner_struct* arg_struct = (struct runner_struct*) param;
+	int i = arg_struct->starting_index;
+	int end_ELEM;
+	if( i == 0){ end_ELEM = MAX_ARRAY_LEN/2;}
+ 	 else if(i > 0){end_ELEM = MAX_ARRAY_LEN;}
+	int j = i;
+	int n = end_ELEM - i;
+	// bubble sorting 
+	for (i; i < n-1; i++){         
+       		for(j = i; j < n-i-1; j++){ 
+          		if(g_unsorted_array[j] > g_unsorted_array[j+1]){
+             	 		swap(&g_unsorted_array[j], &g_unsorted_array[j+1]);
+			}
+		}
+	}
+	
+	printf("Done sorting Indexes [%d] through [%d] of g_unsorted_array[]\n", 
+	       			    arg_struct -> starting_index, end_ELEM - 1);
+	pthread_exit(0);
+
+} // end of Sorting_Runner
 
 
 
@@ -37,6 +62,11 @@
 //
 // 
 // ==========================================================================================
+void*	Merging_Runner(void* param){
+	struct runner_struct* arg_struct = (struct runner_struct*) param;
+
+	
+} // end of Merging_Runner
 
 
 
