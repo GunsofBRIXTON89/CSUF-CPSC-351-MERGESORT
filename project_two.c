@@ -62,10 +62,24 @@ void*	Sorting_Runner(void* param){
 //
 // 
 // ==========================================================================================
-void*	Merging_Runner(void* param){
-	struct runner_struct* arg_struct = (struct runner_struct*) param;
-
+void*	Merging_Runner(/*void* param*/){
+	//struct runner_struct* arg_struct = (struct runner_struct*) param;
 	
+	int i = 0, j= 0, k = 0;
+	while(i <= element from u && j<= element from v){
+		if(g_unsorted_array[i] < g_unsorted_array[j]){
+			g_sorted_array[k] = g_unsorted_array[i]
+			i++;
+		}else{
+			g_sorted_array[k] = g_unsorted_array[j];
+			j++;
+		}
+		k++;
+	}
+	if(i>h){ // copy V[i] through V[m] to S[k] through S[h+m]
+	}else{ // copy U[i] through U[h] to S[k] through S[h+m]
+	
+	}
 } // end of Merging_Runner
 
 
