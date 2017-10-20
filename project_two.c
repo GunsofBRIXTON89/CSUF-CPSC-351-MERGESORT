@@ -17,7 +17,6 @@
 // How to compile: gcc -Wall -std=c99 project_two.c -pthread -o project_two.exe
 // ============================================================================
 #include <pthread.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +29,21 @@ struct 	runner_struct {
 	int starting_index;
 };
 
+
+
+// === swap ===================================================================
+//
+//
+// ============================================================================
+void swap(int *a,int *b){
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+
+} // end of swap
+
+
+
 // === Sorting_Runner =======================================================================
 //
 // 
@@ -39,15 +53,16 @@ void*	Sorting_Runner(void* param){
 	int i = arg_struct->starting_index;
 	int end_ELEM;
 	if( i == 0){ end_ELEM = MAX_ARRAY_LEN/2;}
- 	 else if(i > 0){end_ELEM = MAX_ARRAY_LEN;}
-	int j = i;
-	int n = end_ELEM - i;
+ 	else{end_ELEM = MAX_ARRAY_LEN;}
+	int j;
+	int n = end_ELEM;
 	// bubble sorting 
-	for (i; i < n-1; i++){         
-       		for(j = i; j < n-i-1; j++){ 
+	for (i= arg_struct ->starting_index; i < n-1; i++){
+       		for(j= arg_struct->starting_index; j < n-i-1; j++){
           		if(g_unsorted_array[j] > g_unsorted_array[j+1]){
              	 		swap(&g_unsorted_array[j], &g_unsorted_array[j+1]);
 			}
+		
 		}
 	}
 	
@@ -68,11 +83,17 @@ void*	Merging_Runner(/*void* param*/){
 	
 	int i = 0, j= 0, k = 0;
 	int offset = MAX_ARRAY_LEN/2;  // used for indexing in the second virtual array V[j] 
-	int h =offset; m = offset; // h and m denote the size of each virtual array U[i] and 
+	int h =offset, m = offset; // h and m denote the size of each virtual array U[i] and 
 				  //  and V[j] which happen to be the same value of offset
+
+	printf("The contents of the Intermediate Sorted Array are: {");
+	for(int i=0; i<MAX_ARRAY_LEN; ++i){
+		printf("%d ", g_unsorted_array[i]);
+	}
+	printf("}\n");
 	while(i <= h && j<= m){
 		if(g_unsorted_array[i] < g_unsorted_array[j+offset]){
-			g_sorted_array[k] = g_unsorted_array[i]
+			g_sorted_array[k] = g_unsorted_array[i];
 			i++;
 		}else{
 			g_sorted_array[k] = g_unsorted_array[j+offset];
@@ -85,21 +106,21 @@ void*	Merging_Runner(/*void* param*/){
 			g_sorted_array[k] = g_unsorted_array[j+offset];
 			++k;
 			++j;
-			
+		}
 	}else{ // copy U[i] through U[h] to S[k] through S[h+m]
 		while(k <= MAX_ARRAY_LEN - 1){
 			g_sorted_array[k] = g_unsorted_array[i];
 			++k;
 			++i;
-	}
+	 }	}
  	// Print Sorted Array
 	printf("The contents of the Sorted Array are: {");
 	for(int i=0; i<MAX_ARRAY_LEN; ++i){
-		print("%d, ", g_sorted_array[i]);
+		printf("%d ", g_sorted_array[i]);
 	}
 	printf("}\n");
 	pthread_exit(0);
-			
+
 } // end of Merging_Runner
 
 
@@ -110,7 +131,7 @@ void*	Merging_Runner(/*void* param*/){
 int	main(){
 	printf("The contents of Unsorted Array are: {");
 	for(int i=0; i<MAX_ARRAY_LEN; ++i){
-		print("%d, ", g_unsorted_array[i]);
+		printf("%d ", g_unsorted_array[i]);
 	}
 	printf("}\n");
 	
@@ -132,11 +153,13 @@ int	main(){
 	for(int i = 0; i < 2; ++i){
 		pthread_join(t_ids[i],NULL);    // wait for the thread to exit
 	}
-	printf("Sorting Runners Returned.\n Launching Merging Runner.\n");
+	printf("Sorting Runners Returned.\nLaunching Merge_Runner.\n");
 	// Launch Merge Runner
 	pthread_attr_t attr;
 	pthread_attr_init(&attr); // get the default attributes
-	pthread_create( &t_ids[NUM_SORT_RUNNERS+1], &attr, Merging_Runner, NULL);
+	pthread_create( &t_ids[2], &attr, Merging_Runner, NULL);
 	
+	pthread_join(t_ids[2], NULL);
+	printf("Merge_Runner Returned\n");
 	return 0;
 }// end of main
