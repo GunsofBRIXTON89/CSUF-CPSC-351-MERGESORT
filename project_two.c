@@ -67,7 +67,8 @@ void*	Merging_Runner(/*void* param*/){
 	
 	int i = 0, j= 0, k = 0;
 	int offset = MAX_ARRAY_LEN/2;  // used for indexing in the second virtual array V[j] 
-	int h =offset; m = offset; // h and m denote the size of each virtual array U[i] and V[j]
+	int h =offset; m = offset; // h and m denote the size of each virtual array U[i] and 
+				  //  and V[j] which happen to be the same value of offset
 	while(i <= h && j<= m){
 		if(g_unsorted_array[i] < g_unsorted_array[j+offset]){
 			g_sorted_array[k] = g_unsorted_array[i]
@@ -78,10 +79,17 @@ void*	Merging_Runner(/*void* param*/){
 		}
 		k++;
 	}
-	if(i>h){ // copy V[i] through V[m] to S[k] through S[h+m]
-		for(; i < 
+	if(i>h){ // copy V[j] through V[m] to S[k] through S[h+m]
+		while(k <= MAX_ARRAY_LEN - 1){
+			g_sorted_array[k] = g_unsorted_array[j+offset];
+			++k;
+			++j;
+			
 	}else{ // copy U[i] through U[h] to S[k] through S[h+m]
-	
+		while(k <= MAX_ARRAY_LEN - 1){
+			g_sorted_array[k] = g_unsorted_array[i];
+			++k;
+			++i;
 	}
 } // end of Merging_Runner
 
