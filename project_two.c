@@ -91,6 +91,8 @@ void*	Merging_Runner(/*void* param*/){
 			++k;
 			++i;
 	}
+	pthread_exit(0);
+			
 } // end of Merging_Runner
 
 
@@ -99,31 +101,28 @@ void*	Merging_Runner(/*void* param*/){
 // 
 // ==========================================================================================
 int	main(){
-
-	void*   function_pointers[NUM_THREADS] = {CheckRows_runner,CheckColumns_runner,
-						  CheckGrid_runner};
-	pthread_t   t_ids[NUM_THREADS];
+	struct runner_struct arg[2];
+	pthread_t t_ids[3];
+	arg[0].starting_index = 0;
+	arg[1].starting_index = 5;
 	// Launch Threads
-	struct runner_struct arg[NUM_THREADS];
-
+	printf("Launching Sorting Runners now...\n");
 	for(int i = 0; i < NUM_THREADS; ++i){
-		arg[i].case_sum = 0;
 		pthread_attr_t attr;
 		pthread_attr_init(&attr);   // get the default attributes
-		pthread_create(&t_ids[i],&attr,function_pointers[i],&arg[i]); // create the thread
+		pthread_create( &t_ids[i], &attr, Sorting_Runner, &arg[i]); // create the thread
 
 	}
 
-	int sum = 0; // sum of all arg->case_sums
 
-	// Wait untill each thread is done working
-	for(int i = 0; i < NUM_THREADS; ++i){
+	// Wait until each thread is done working
+	for(int i = 0; i < 2; ++i){
 		pthread_join(t_ids[i],NULL);    // wait for the thread to exit
-		sum += arg[i].case_sum;
 	}
-
-	if( sum == 27){printf("The Sudoku Set is a valid set\n");}
-	 else{ printf("The Sudoku Set is Not a valid set\n"); }
+	printf("Sorting Runners Returned; Launching Merging Runner\n");
+	pthread_attr_t attr;
+	pthread_attr_init(&attr); // get the default attributes
+	pthread_create( &t_ids[2], &attr, Merging_Runner, NULL)
 
 	return 0;
 
