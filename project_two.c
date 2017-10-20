@@ -20,8 +20,9 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
- 
-#define MAX_ARRAY_LEN
+
+#define NUM_SORT_RUNNERS 2 
+#define MAX_ARRAY_LEN 10
 int g_unsorted_array[MAX_ARRAY_LEN] = {7,12,19,3,18,4,3,6,15,8};
 int g_sorted_array[MAX_ARRAY_LEN] = { 0 };
 
@@ -91,6 +92,12 @@ void*	Merging_Runner(/*void* param*/){
 			++k;
 			++i;
 	}
+ 	// Print Sorted Array
+	printf("The contents of the Sorted Array are: {");
+	for(int i=0; i<MAX_ARRAY_LEN; ++i){
+		print("%d, ", g_sorted_array[i]);
+	}
+	printf("}\n");
 	pthread_exit(0);
 			
 } // end of Merging_Runner
@@ -101,13 +108,19 @@ void*	Merging_Runner(/*void* param*/){
 // 
 // ==========================================================================================
 int	main(){
-	struct runner_struct arg[2];
-	pthread_t t_ids[3];
+	printf("The contents of Unsorted Array are: {");
+	for(int i=0; i<MAX_ARRAY_LEN; ++i){
+		print("%d, ", g_unsorted_array[i]);
+	}
+	printf("}\n");
+	
+	struct runner_struct arg[NUM_SORT_RUNNERS];
+	pthread_t t_ids[NUM_SORT_RUNNERS+1]; // 2 Sort Runners and 1 Merge Runner Thread
 	arg[0].starting_index = 0;
-	arg[1].starting_index = 5;
+	arg[1].starting_index = MAX_ARRAY_LEN/2;
 	// Launch Threads
 	printf("Launching Sorting Runners now...\n");
-	for(int i = 0; i < NUM_THREADS; ++i){
+	for(int i = 0; i < NUM_SORT_RUNNERS; ++i){
 		pthread_attr_t attr;
 		pthread_attr_init(&attr);   // get the default attributes
 		pthread_create( &t_ids[i], &attr, Sorting_Runner, &arg[i]); // create the thread
@@ -119,12 +132,11 @@ int	main(){
 	for(int i = 0; i < 2; ++i){
 		pthread_join(t_ids[i],NULL);    // wait for the thread to exit
 	}
-	printf("Sorting Runners Returned; Launching Merging Runner\n");
+	printf("Sorting Runners Returned.\n Launching Merging Runner.\n");
+	// Launch Merge Runner
 	pthread_attr_t attr;
 	pthread_attr_init(&attr); // get the default attributes
-	pthread_create( &t_ids[2], &attr, Merging_Runner, NULL)
-
+	pthread_create( &t_ids[NUM_SORT_RUNNERS+1], &attr, Merging_Runner, NULL);
+	
 	return 0;
-
-
 }// end of main
